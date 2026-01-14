@@ -36,22 +36,20 @@ export const getBlogs = async (req, res) => {
 
 export const getBlogById = async (req, res) => {
   try {
-    const blog = await Blog.findById(req.params.id).populate(
-      "author",
-      "name"
-    );
+    const blog = await Blog.findById(req.params.id)
+      .populate("author", "name")
+      .populate("comments.user", "name");
 
     if (!blog) {
       return res.status(404).json({ message: "Blog not found" });
     }
 
     res.json(blog);
-  } catch (err) {
-    res.status(500).json({
-      message: "Failed to fetch blog",
-    });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch blog" });
   }
 };
+
 
 export const likeBlog = async (req, res) => {
   try {
